@@ -1,7 +1,7 @@
 ---
 - name: install httpd and start
   hosts: web-server
-  become: ansadmin
+  become: root
   tasks:
   - name: install httpd
     yum:
