@@ -22,7 +22,7 @@
       path: /opt/tomcat10
       owner: tomcat
       group: tomcat
-      mode: 755
+      mode: 777
       recurse: yes
  
   - name: download & unarchive tomcat10 
@@ -37,7 +37,7 @@
       path: /opt/tomcat10
       owner: tomcat
       group: tomcat
-      mode: "u+rwx,g+rx,o=rx"
+      mode: 777
       recurse: yes
       state: directory
 
