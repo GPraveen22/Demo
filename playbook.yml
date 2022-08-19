@@ -40,3 +40,16 @@
       mode: "u+rwx,g+rx,o=rx"
       recurse: yes
       state: directory
+  - name: Stop Tomcat  
+    command: /opt/tomcat10/bin/shutdown.sh
+
+  - name: Delete old war  
+    command: rm -rf /opt/tomcat10/webapps/*.war
+
+  - name: Copy the war file  
+    copy:  
+      src: /var/lib/jenkins/workspace/Jenkins-Demo/target/app.war
+      dest:  /opt/tomcat10/webapps/
+
+  - name: Start Tomcat  
+    command: /opt/tomcat10/bin/startup.sh 
