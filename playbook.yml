@@ -1,8 +1,8 @@
 ---
-- name: install nginx and start
+- name: install httpd and start
   hosts: web-server
   tasks:
-  - name: install nginx
+  - name: install httpd
     yum:
-      name: nginx
+      name: httpd
       state: latest
