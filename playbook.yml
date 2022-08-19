@@ -1,45 +1,63 @@
----
-- name: install httpd and start
+--- 
+- 
+  become: true
   hosts: web-server
-  become: yes
-  tasks:
-  - name: install httpd
-    yum:
-      name: httpd
-      state: present
-  - name: create tomcat user
-    user:
-      name: tomcat
-  - name: create tomcat group
-    group:
-      name: tomcat
-  - name: install java
-    yum:
-      name: java-1.8.0-openjdk
-      state: present
-  - name: Create a Tomcat Directory
-    file:
-      path: /opt/tomcat10
-      owner: tomcat
-      group: tomcat
-      mode: 777
-      recurse: yes
- 
-  - name: download & unarchive tomcat10 
-    unarchive:
-      src: https://mirrors.estointernet.in/apache/tomcat/tomcat-10/v10.0.20/bin/apache-tomcat-10.0.20.tar.gz
-      dest: /opt/tomcat10
-      remote_src: yes
-      extra_opts: [--strip-components=1]
- 
-  - name: Change ownership of tomcat directory
-    file:
-      path: /opt/tomcat10
-      owner: tomcat
-      group: tomcat
-      mode: 777
-      recurse: yes
-      state: directory
-
-  - name: Start Tomcat  
-    command: /opt/tomcat10/bin/startup.sh 
+  name: "install httpd and start"
+  tasks: 
+    - 
+      name: "install httpd"
+      yum: 
+        name: httpd
+        state: present
+    - 
+      name: "create tomcat user"
+      user: 
+        name: tomcat
+    - 
+      group: 
+        name: tomcat
+      name: "create tomcat group"
+    - 
+      name: "install java"
+      yum: 
+        name: java-1.8.0-openjdk
+        state: present
+    - 
+      file: 
+        group: tomcat
+        mode: 777
+        owner: tomcat
+        path: /opt/tomcat10
+        recurse: true
+      name: "Create a Tomcat Directory"
+    - 
+      name: "download & unarchive tomcat10"
+      unarchive: 
+        dest: /opt/tomcat10
+        extra_opts: 
+          - "--strip-components=1"
+        remote_src: true
+        src: "https://mirrors.estointernet.in/apache/tomcat/tomcat-10/v10.0.20/bin/apache-tomcat-10.0.20.tar.gz"
+    - 
+      file: 
+        group: tomcat
+        mode: 777
+        owner: tomcat
+        path: /opt/tomcat10
+        recurse: true
+        state: directory
+      name: "Change ownership of tomcat directory"
+    - 
+      command: /opt/tomcat10/bin/shutdown.sh
+      name: "Stop Tomcat"
+    - 
+      command: "rm -rf /opt/tomcat10/webapps/*.war"
+      name: "Delete old war"
+    - 
+      copy: 
+        dest: /opt/tomcat10/webapps/
+        src: /var/lib/jenkins/workspace/Jenkins-Demo/target/app.war
+      name: "Copy the war file"
+    - 
+      command: /opt/tomcat10/bin/startup.sh
+      name: "Start Tomcat"
