@@ -1,7 +1,6 @@
 ---
-- name: install nginx and start 
-  become: yes
-  hosts: all
+- name: install nginx and start
+  hosts: web-server
   tasks:
   - name: install nginx
     yum:
